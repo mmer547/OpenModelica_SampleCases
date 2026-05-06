@@ -324,89 +324,6 @@ Chamber")}));
 Boundary")}));
     end DischargeBoundary;
 
-    model SystemParameters
-      /*
-        システム共通パラメータ
-    
-        本モデルは inner/outer 機構により、各コンポーネントから参照される。
-        圧縮室、吸入側、吐出側、吐出弁、漏れ流路などで共通に使う
-        運転条件および幾何パラメータをここで定義する。
-      */
-      
-      // ------------------------------------------------------------
-      // 運転条件
-      // ------------------------------------------------------------
-      parameter Real f = 60
-        "回転周波数 [Hz]";
-    
-      parameter Real period = 1/f
-        "1周期の時間 [s]";
-    
-      // ------------------------------------------------------------
-      // 圧縮室パラメータ
-      // ------------------------------------------------------------
-      parameter Real Vmin = 0.000001
-        "圧縮室の最小体積 [m3]";
-    
-      parameter Real Vcc = 0.0000565
-        "圧縮室の押しのけ容積 [m3]";
-    
-      parameter Real m0 = 0.000648365
-        "圧縮室内ガス質量の初期値 [kg]";
-    
-      // ------------------------------------------------------------
-      // 吸入側・吐出側の境界条件
-      // ------------------------------------------------------------
-      parameter Real ps = 0.55e6
-        "吸入側圧力 [Pa]";
-    
-      parameter Real Ts = 273.15 + 13.0
-        "吸入側温度 [K]";
-    
-      parameter Real pd = 1.9e6
-        "吐出側圧力 [Pa]";
-    
-      // ------------------------------------------------------------
-      // 吐出弁パラメータ
-      // ------------------------------------------------------------
-      parameter Real CdOut = 0.9
-        "吐出流量係数 [-]";
-    
-      parameter Real Aout = 1.0e-6
-        "吐出口有効面積 [m2]";
-    
-      // ------------------------------------------------------------
-      // 漏れ流路パラメータ
-      // ------------------------------------------------------------
-      parameter Real CdLeak = 0.1
-        "漏れ流量係数 [-]";
-    
-      parameter Real Aleak = 1.0e-8
-        "吸入側漏れ相当面積 [m2]";
-    
-      // ------------------------------------------------------------
-      // 主吸入モデルパラメータ
-      // ------------------------------------------------------------
-      parameter Real Qm = 8.20604e-8
-        "主吸入質量流量 [kg/s]";
-    
-      parameter Real suctionAngle = 10
-        "主吸入が発生する角度範囲 [deg]";
-    
-    initial equation
-      /*
-        初期方程式
-    
-        現時点では、ここでは追加の初期条件を指定しない。
-        各状態量の初期値は、各コンポーネント内の start 属性で与える。
-      */
-
-      annotation(
-        defaultComponentPrefixes = "inner",
-        Diagram,
-        Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(extent = {{-80, 100}, {80, -100}}, textString = "System
-Parameters")}));
-    end SystemParameters;
   end Components;
 
   package Media
@@ -452,7 +369,7 @@ Parameters")}));
 
   package Examples
     model SimpleChamberTest
-  inner Components.SystemParameters systemParameters annotation(
+  inner SystemParameters system annotation(
         Placement(transformation(origin = {-90, 90}, extent = {{-10, -10}, {10, 10}})));
   Components.SuctionChamber suctionChamber annotation(
         Placement(transformation(origin = {-90, 0}, extent = {{-10, -10}, {10, 10}})));
@@ -473,6 +390,92 @@ Parameters")}));
         Line(points = {{-80, 8}, {-40, 8}}));
     end SimpleChamberTest;
   end Examples;
+
+  model SystemParameters
+    /*
+      システム共通パラメータ
+  
+      本モデルは inner/outer 機構により、各コンポーネントから参照される。
+      圧縮室、吸入側、吐出側、吐出弁、漏れ流路などで共通に使う
+      運転条件および幾何パラメータをここで定義する。
+    */
+    
+    // ------------------------------------------------------------
+    // 運転条件
+    // ------------------------------------------------------------
+    parameter Real f = 60
+      "回転周波数 [Hz]";
+  
+    parameter Real period = 1/f
+      "1周期の時間 [s]";
+  
+    // ------------------------------------------------------------
+    // 圧縮室パラメータ
+    // ------------------------------------------------------------
+    parameter Real Vmin = 0.000001
+      "圧縮室の最小体積 [m3]";
+  
+    parameter Real Vcc = 0.0000565
+      "圧縮室の押しのけ容積 [m3]";
+  
+    parameter Real m0 = 0.000648365
+      "圧縮室内ガス質量の初期値 [kg]";
+  
+    // ------------------------------------------------------------
+    // 吸入側・吐出側の境界条件
+    // ------------------------------------------------------------
+    parameter Real ps = 0.55e6
+      "吸入側圧力 [Pa]";
+  
+    parameter Real Ts = 273.15 + 13.0
+      "吸入側温度 [K]";
+  
+    parameter Real pd = 1.9e6
+      "吐出側圧力 [Pa]";
+  
+    // ------------------------------------------------------------
+    // 吐出弁パラメータ
+    // ------------------------------------------------------------
+    parameter Real CdOut = 0.9
+      "吐出流量係数 [-]";
+  
+    parameter Real Aout = 1.0e-6
+      "吐出口有効面積 [m2]";
+  
+    // ------------------------------------------------------------
+    // 漏れ流路パラメータ
+    // ------------------------------------------------------------
+    parameter Real CdLeak = 0.1
+      "漏れ流量係数 [-]";
+  
+    parameter Real Aleak = 1.0e-8
+      "吸入側漏れ相当面積 [m2]";
+  
+    // ------------------------------------------------------------
+    // 主吸入モデルパラメータ
+    // ------------------------------------------------------------
+    parameter Real Qm = 8.20604e-8
+      "主吸入質量流量 [kg/s]";
+  
+    parameter Real suctionAngle = 10
+      "主吸入が発生する角度範囲 [deg]";
+  
+  initial equation
+    /*
+      初期方程式
+  
+      現時点では、ここでは追加の初期条件を指定しない。
+      各状態量の初期値は、各コンポーネント内の start 属性で与える。
+    */
+
+    annotation(
+      defaultComponentName="system",
+      defaultComponentPrefixes = "inner",
+      Diagram,
+      Icon(graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}), Text(extent = {{-80, 100}, {80, -100}}, textString = "System
+Parameters")}));
+  end SystemParameters;
+
   annotation(
     uses(Modelica(version = "4.1.0")));
 end Compression_Chamber;
